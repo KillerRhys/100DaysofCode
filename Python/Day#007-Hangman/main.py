@@ -21,7 +21,8 @@ def get_word():
     get_word.letters = []
     get_word.puzz = random.choice(words)
     get_word.l = len(get_word.puzz)
-    for i in range(get_word.l-1):
+    get_word.l -= 1
+    for i in range(get_word.l):
         get_word.letters.append("_")
 
     get_word.slits = " ".join(get_word.letters)
@@ -40,7 +41,7 @@ def play():
     while not game_start.game_over:
         print(hangman_art.stages[game_start.life])
         print(get_word.slits)
-        print(f"{get_word.l - 1} letters.")
+        print(f"{get_word.l} letters remaining.")
         guess = input(f"Pick a letter? You have {game_start.life} attempts left! ")
         guess = guess.lower()
         print(game_start.already_guessed)
@@ -50,6 +51,7 @@ def play():
 
         elif guess in get_word.puzz:
             print("Correct!")
+            get_word.l -= 1
             x = [i.start() for i in re.finditer(guess, get_word.puzz)]
             for item in x:
                 get_word.letters[item] = guess
