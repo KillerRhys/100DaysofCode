@@ -8,9 +8,6 @@ from random import choice as pick
 import sys
 
 
-game_over = False
-
-
 def deal_card():
     cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
     card = pick(cards)
@@ -70,34 +67,41 @@ def new_hand():
         dealer_cards.append(deal_card())
 
 
-player_cards = []
-dealer_cards = []
+def game_loop():
+    player_cards = []
+    dealer_cards = []
+    game_over = False
 
-for i in range(2):
-    player_cards.append(deal_card())
-    dealer_cards.append(deal_card())
+    for i in range(2):
+        player_cards.append(deal_card())
+        dealer_cards.append(deal_card())
 
-while not game_over:
-    player_score = get_score(player_cards)
-    dealer_score = get_score(dealer_cards)
-    print(f"You hand: {player_cards}, Totaling: {player_score}")
-    print(f"House is showing a {dealer_cards[0]}")
+    while not game_over:
+        player_score = get_score(player_cards)
+        dealer_score = get_score(dealer_cards)
+        print(f"You hand: {player_cards}, Totaling: {player_score}")
+        print(f"House is showing a {dealer_cards[0]}")
 
-    if player_score == 0 or dealer_score == 0 or player_score > 21:
-        game_over = True
-        new_hand()
-
-    else:
-        hit = input("Would you like another card? ")
-        if hit.startswith("y"):
-            player_cards.append(deal_card())
-
-        else:
+        if player_score == 0 or dealer_score == 0 or player_score > 21:
             game_over = True
             new_hand()
 
-while dealer_score != 0 and dealer_score < 17:
-    dealer_cards.append(deal_card())
-    dealer_score = get_score(dealer_cards)
+        else:
+            hit = input("Would you like another card? ")
+            if hit.startswith("y"):
+                player_cards.append(deal_card())
 
-print(game_check(player_score, dealer_score))
+            else:
+                game_over = True
+                new_hand()
+
+    while dealer_score != 0 and dealer_score < 17:
+        dealer_cards.append(deal_card())
+        dealer_score = get_score(dealer_cards)
+
+    print(game_check(player_score, dealer_score))
+
+
+while input("Play another hand? ") == "y":
+    clear_screen()
+    game_loop()
