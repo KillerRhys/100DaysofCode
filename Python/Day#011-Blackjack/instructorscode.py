@@ -1,13 +1,9 @@
 """ Blackjack
     Coded by TechGYQ
     www.mythosworks.com
-    OC:2022.05.21-2009 """
+    OC:2022.05.24-1738 """
 
-import os
 from random import choice as pick
-import sys
-
-
 game_over = False
 
 
@@ -15,12 +11,6 @@ def deal_card():
     cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
     card = pick(cards)
     return card
-
-
-def clear_screen():
-    """Clears the current console."""
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print("\n" * 80)
 
 
 def get_score(cards):
@@ -35,41 +25,28 @@ def get_score(cards):
 
 def game_check(player_score, dealer_score):
     if player_score == dealer_score:
-        return "It's a draw!"
+        return "Draw"
 
     elif dealer_score == 0:
         return "House has blackjack!"
 
     elif player_score == 0:
-        return "Blackjack! You win!"
+        return f"{user} has blackjack!"
 
     elif player_score > 21:
-        return "Bust! You lose!"
+        return f"{user} busts!"
 
     elif dealer_score > 21:
-        return "House busts!"
+        return "House loses!"
 
     elif player_score > dealer_score:
-        return f"You win with {player_score}"
+        return f"{user} wins!"
 
     else:
         return "House wins!"
 
 
-def kill():
-    sys.exit()
-
-
-def new_hand():
-    game_over = False
-    player_cards = []
-    dealer_cards = []
-
-    for i in range(2):
-        player_cards.append(deal_card())
-        dealer_cards.append(deal_card())
-
-
+user = input("What's your name stranger? ")
 player_cards = []
 dealer_cards = []
 
@@ -80,12 +57,11 @@ for i in range(2):
 while not game_over:
     player_score = get_score(player_cards)
     dealer_score = get_score(dealer_cards)
-    print(f"You hand: {player_cards}, Totaling: {player_score}")
+    print(f"{user}'s cards: {player_cards}, Totaling: {player_score}")
     print(f"House is showing a {dealer_cards[0]}")
 
     if player_score == 0 or dealer_score == 0 or player_score > 21:
         game_over = True
-        new_hand()
 
     else:
         hit = input("Would you like another card? ")
@@ -94,7 +70,6 @@ while not game_over:
 
         else:
             game_over = True
-            new_hand()
 
 while dealer_score != 0 and dealer_score < 17:
     dealer_cards.append(deal_card())
