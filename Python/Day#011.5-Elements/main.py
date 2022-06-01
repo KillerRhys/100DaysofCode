@@ -4,22 +4,13 @@
     OC:2022.05.27-1645 """
 
 import os
+import json
 import random
 import sys
-
-
-# Vars
-player = input("What is your name young one...? ")
-games_played = 0
-games_won = 0
-games_lost = 0
-level = 1
-current_exp = 0
-next_level = 250
-max_hp = 100
-luck = 1
-items = {"Bonz": 100, "Potion": 1, "Hi-potion": 0, "Giant's Brew": 0}
-spells = ["fire", "earth", "water", "wind"]
+player = ""
+player_data = {}
+items = {}
+spells = []
 
 
 # TODO: Battle function - Needs new flavor text and enemy adjustment
@@ -27,11 +18,11 @@ def battle():
     """ Starts a battle and handles the combat, Calling After battle report when finished """
     battle_finished = False
     turns = 0
-    current_hp = max_hp
-    enemy_hp = max_hp * random.randint(0, 2)
+    current_hp = player_data["max_hp"]
+    enemy_hp = player_data["max_hp"] * random.randint(0, 2)
     while not battle_finished:
         if current_hp >= 1 and enemy_hp >= 1:
-            print(f"{player} Level:{level} Hp:{current_hp}/{max_hp} Enemy Hp: {enemy_hp} Satchel:{items}")
+            print(f"\n{player} Level:{player_data['level']} Hp:{current_hp}/{player_data['max_hp']} Enemy Hp: {enemy_hp} Satchel:{items}\n")
             move = input(f"What action will you take?\nSpell booK:{spells}\n Action: ")
             cpu_move = random.choice(spells)
             if move == "fire" and cpu_move == "fire":
@@ -145,19 +136,21 @@ def after_battle(turns):
     bonz = turns * random.randint(1, 3)
     items["Bonz"] += bonz
     print(f"You gain {xp} experience points and {bonz} Bonz.")
-    current_exp += xp
-    if current_exp > next_level:
-        level += 1
+    player_data['current_xp'] += xp
+    if player_data['current_xp'] >= player_data['next_level']:
+        player_data['level'] += 1
         hp_up = random.randint(1, 10)
-        max_hp += hp_up
-        next_level = next_level * 2
-        current_exp = 0
-        print(f"You reach Level: {level} and Hp increased by {hp_up}. {next_level} to next level.")
+        player_data['max_hp'] += hp_up
+        player_data['next_level'] = player_data['next_level'] * 2
+        player_data['current_exp'] = 0
+        print(f"You reach Level: {player_data['level']} and Hp increased by {hp_up}. {player_data['next_level']} to next level.\n")
+        save()
         battle()
 
     else:
-        tnl = next_level - current_exp
-        print(f"{tnl} til next level-up!")
+        tnl = player_data['next_level'] - player_data['current_xp']
+        print(f"{tnl} til next level-up!\n")
+        save()
         battle()
 
 
@@ -171,8 +164,33 @@ def after_battle(turns):
 
 
 # TODO: Save Function
+def save():
+    filename = player + ".dat"
+    with open(filename, 'w') as file:
+        file.write(json.dumps(player_data))
 
 
 # TODO: Load Function
+def load():
+    player = input("Please input the player name you wish to continue as...: ")
+    filename = player + ".dat"
+    with open(filename) as file:
+        player_data = json.load(file)
+        items = {}
+        spells = []
+        return player, player_data, items, spells
+
+
+# Vars
+get_save = input("Would you like to load a file? ")
+if get_save.startswith("y"):
+    load()
+
+else:
+    player = input("What is your name young one...? ")
+    player_data = {"games_played": 0, "games_won": 0, "games_lost": 0, "level": 1, "current_xp": 0, "next_level": 250, "max_hp": 100, "luck": 1}
+    items = {"Bonz": 100, "Potion": 1, "Hi-potion": 0, "Giant's Brew": 0}
+    spells = ["fire", "earth", "water", "wind"]
+
 
 battle()
