@@ -2,52 +2,70 @@
     Coded by TechGYQ
     www.MythosWorks.com
     OC:2022.06.01-1939 """
-
+import sys
 from random import randint as ranum
 import art
 
 
-easy = 10
-hard = 5
-insane = 1
-lives = 1
+EASY_MODE = 9
+NORMAL_MODE = 4
+HARD_MODE = 2
 
-diff = input("What difficulty would you like to play on? easy, hard or insane? ")
-if diff.startswith("e"):
-    lives = 10
 
-elif diff.startswith("h"):
-    lives = 5
+def diff_select():
+    """ Lets user select their difficulty level """
+    diff = input("Please select your difficulty level. 'easy', 'normal', 'hard': ")
+    if diff.startswith('e'):
+        return EASY_MODE
 
-elif diff.startswith('i'):
-    lives = 1
+    elif diff.startswith('n'):
+        return NORMAL_MODE
 
-else:
-    print("That's not an option... probably should put you on easy champ...")
-    lives = 10
-
-game_over = False
-answer = ranum(1, 100)
-while lives > 0 and not game_over:
-    print("\n" + art.logo +"\n")
-    guess = int(input("Ok pick a number between 1-100: "))
-    if guess == answer:
-        print(f"Sweet you got it! The number was {answer}")
-        game_over = True
-
-    elif guess > answer:
-        lives -= 1
-        print(f"Sorry {guess} is too high! {lives} attempts left!")
-
-    elif guess < answer:
-        lives -= 1
-        print(f"{guess} is too low! {lives} attempts left!")
+    elif diff.startswith('h'):
+        return HARD_MODE
 
     else:
-        if lives > 0:
-            print(f"That's not a real guess try again! {lives} attempts left!")
+        print("That's not right try again!!")
+        diff_select()
+
+
+def play_again():
+    play = input("Want to play again: ")
+    if play.startswith('y'):
+        game()
+
+    else:
+        sys.exit()
+
+
+def game():
+    print(art.logo + "\n")
+    lives = diff_select()
+    game_over = False
+    answer = ranum(1, 100)
+
+    while lives > 0 and not game_over:
+        guess = int(input("Guess a number between 1-100: "))
+        if guess == answer:
+            print(f"That's right the answer was {answer}!\n")
+            game_over = True
+            play_again()
+
+        elif guess > answer:
+            print(f"Whoa that's too high my friend try again! {lives} attempts left.\n")
+            lives -= 1
+
+        elif guess < answer:
+            print(f"Hmm that seems to be too low! {lives} attempts left!\n")
+            lives -= 1
 
         else:
-            print(f"Uh-oh you're out of tries my friend!")
-            game_over = True
+            if lives > 0:
+                print(f"That's not a valid input try again!\n")
 
+            else:
+                print(f"All out of tries too bad!\n")
+                play_again()
+
+
+game()
