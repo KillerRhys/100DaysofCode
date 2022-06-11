@@ -1,4 +1,4 @@
-class Cipher():
+class Cipher:
     """ Caeser's Cipher V1.0 Encrypt / Decrypt messages """
 
     def __init__(self):

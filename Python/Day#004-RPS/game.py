@@ -4,7 +4,7 @@ from random import choice as pick
 from art import logo as ls
 
 
-class GamePlay():
+class GamePlay:
     wins = 0
     losses = 0
     draws = 0

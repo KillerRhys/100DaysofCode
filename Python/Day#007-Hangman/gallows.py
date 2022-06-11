@@ -6,7 +6,7 @@ import re
 import sys
 
 
-class Hanged():
+class Hanged:
     """ Main Game Code, Creates List, Picks word & handles gameplay"""
 
     def __init__(self):

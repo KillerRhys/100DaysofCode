@@ -1,7 +1,7 @@
 from random import choice
 
 
-class BandGenerator():
+class BandGenerator:
     a_list = open('adjectives.txt', 'r').readlines()
     b_list = open('nouns.txt', 'r').readlines()
 

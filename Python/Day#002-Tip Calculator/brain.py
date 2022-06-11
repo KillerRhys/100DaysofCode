@@ -1,7 +1,7 @@
 """ OOP practice Coded by TechGYQ"""
 
 
-class CalcSystem():
+class CalcSystem:
     bill = float(input("How much is the bill: "))
     party = int(input("How many people in your party: "))
     tip = float(input("What percent would you like to tip: "))
