@@ -2,7 +2,7 @@
     Coded by TechGYQ
     www.MythosWorks.com
     OC:2022.06.14-2100 """
-import random
+
 import time
 from turtle import Screen
 from snake import Snake
@@ -15,7 +15,7 @@ screen.setup(width=600, height=600)
 screen.bgcolor('black')
 screen.title("Snek!")
 screen.tracer(0)
-game_on = True
+Playing = True
 
 snake = Snake()
 food = Food()
@@ -27,7 +27,7 @@ screen.onkey(key='Down', fun=snake.down)
 screen.onkey(key='Left', fun=snake.left)
 screen.onkey(key='Right', fun=snake.right)
 
-while game_on:
+while Playing:
     screen.update()
     time.sleep(0.1)
     # snake.snake_skin()
@@ -40,12 +40,12 @@ while game_on:
         snake.extend()
 
     if snake.head.xcor() > 290 or snake.head.xcor() < -290 or snake.head.ycor() > 290 or snake.head.ycor() < -290:
-        board.game_over()
-        game_on = False
+        snake.phoenix()
+        board.game_reset()
 
     for segment in snake.segments[1:]:
         if snake.head.distance(segment) < 10:
-            game_on = False
-            board.game_over()
+            snake.phoenix()
+            board.game_reset()
 
 screen.exitonclick()

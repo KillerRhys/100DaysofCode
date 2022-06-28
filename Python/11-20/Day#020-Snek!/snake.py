@@ -27,18 +27,26 @@ class Snake:
         new_segment.goto(position)
         self.segments.append(new_segment)
 
-    def snake_skin(self):
-        alt = True
-        for segment in self.segments:
-            if alt:
-                segment.color('yellow')
-                alt = False
-            else:
-                segment.color('blue')
-                alt = True
+    # def snake_skin(self):
+    #     alt = True
+    #     for segment in self.segments:
+    #         if alt:
+    #             segment.color('yellow')
+    #             alt = False
+    #         else:
+    #             segment.color('blue')
+    #             alt = True
 
     def extend(self):
         self.add_segment(self.segments[-1].position())
+
+    def phoenix(self):
+        for seg_num in range(len(self.segments)):
+            self.segments[seg_num].reset()
+        self.segments.clear()
+        self.new_snake()
+        self.head = self.segments[0]
+        self.tail = self.segments[-1]
 
     def move(self):
         for seg_num in range(len(self.segments) - 1, 0, -1):
