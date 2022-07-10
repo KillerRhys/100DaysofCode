@@ -32,9 +32,8 @@ while not game_over:
         guess = display.textinput(title=f"Current Score: {score}/{states}", prompt="Guess a State: ").title()
         if guess == 'Exit':
             all_states = data.state.to_list()
-            for item in guessed:
-                all_states.remove(item)
-            missed_states = pandas.DataFrame(all_states)
+            missed_states_list = [state for state in all_states if state not in guessed]
+            missed_states = pandas.DataFrame(missed_states_list)
             missed_states.to_csv('missed_states.csv')
             break
 
