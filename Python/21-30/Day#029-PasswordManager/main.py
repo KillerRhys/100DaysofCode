@@ -10,6 +10,7 @@ from tkinter import *
 from tkinter import messagebox
 from random import choice, randint, shuffle
 import pyperclip
+import json
 
 
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
@@ -33,15 +34,49 @@ def gen_pass():
     pass_entry.insert(0, password)
 
 
-# TODO Fix is_ok error
-def save_info():
-    site = site_entry.get()
-    user = name_entry.get()
-    password = pass_entry.get()
-
+def search():
+    site = site_entry.get().title()
     if len(site) == 0:
         answer = tkinter.simpledialog.askstring(title="Missing Data", prompt="Please enter a valid site!")
         site_entry.insert(0, answer)
+
+    else:
+        try:
+            with open('data.json', 'r') as data_file:
+                data = json.load(data_file)
+
+        except FileNotFoundError:
+            tkinter.messagebox.showwarning(message='There is no saved data! Save a site before trying again!')
+
+        else:
+            try:
+                result = data[site]
+            except KeyError:
+                tkinter.messagebox.showwarning(message="There is no site by that name currently recorded.. Try again?")
+            else:
+                name_entry.delete(0, END)
+                pass_entry.delete(0, END)
+                user = result['email']
+                password = result['password']
+                name_entry.insert(0, user)
+                pass_entry.insert(0, password)
+
+
+# TODO Fix is_ok error
+def save_info():
+    site = site_entry.get().title()
+    user = name_entry.get()
+    password = pass_entry.get()
+    new_data = {site: {
+        'email': user,
+        'password': password
+
+        }
+    }
+
+    if len(site) == 0:
+        answer = tkinter.simpledialog.askstring(title="Missing Data", prompt="Please enter a valid site!")
+        site_entry.insert(0, answer.title())
         save_info()
 
     elif len(user) == 0:
@@ -55,11 +90,21 @@ def save_info():
         save_info()
 
     else:
-        is_ok = messagebox.askokcancel(title='Danger', message=f'Are these correct? \nSite: {site}, \nUser: {user}, '
-                                                               f'\nPass: {password}\nIs it ok to save?')
-        if is_ok:
-            with open('data.dat', 'a') as file:
-                file.write(f'{site} | {user} | {password} \n')
+        try:
+            with open('data.json', 'r') as data_file:
+                data = json.load(data_file)
+
+        except FileNotFoundError:
+            with open('data.json', 'w') as data_file:
+                json.dump(new_data, data_file, indent=4)
+
+        else:
+            data.update(new_data)
+
+            with open('data.json', 'w') as data_file:
+                json.dump(data, data_file, indent=4)
+
+        finally:
             site_entry.delete(0, END)
             pass_entry.delete(0, END)
 
@@ -95,10 +140,12 @@ pass_entry.grid(column=1, row=3, columnspan=2, sticky='w')
 
 
 # Buttons
+search_button = Button(text='Search', width=30, command=search)
+search_button.grid(column=1, row=4, sticky='w')
 pass_button = Button(text='Generate Password', width=30, command=gen_pass)
-pass_button.grid(column=1, row=4, sticky='w')
+pass_button.grid(column=1, row=5, sticky='w')
 add_button = Button(text='Add', width=30, command=save_info)
-add_button.grid(column=1, row=5, columnspan=2, sticky='w')
+add_button.grid(column=1, row=6, columnspan=2, sticky='w')
 
 
 display.mainloop()

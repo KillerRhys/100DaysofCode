@@ -8,6 +8,21 @@ import pandas
 data = pandas.read_csv('nato_phonetic_alphabet.csv')
 
 phon_dict = {row.letter:row.code for (index, row) in data.iterrows()}
-word = input('Please input the word you need help conveying: ').upper()
-result = [phon_dict[letter] for letter in word]
-print(result)
+
+
+def xfer_phone():
+    word = input('Please input the word you need help conveying: ').upper()
+    try:
+        result = [phon_dict[letter] for letter in word]
+
+    except KeyError:
+        print('Sorry only letters in the alphabet please!')
+        xfer_phone()
+
+    else:
+        print(result)
+        print()
+        xfer_phone()
+
+
+xfer_phone()
