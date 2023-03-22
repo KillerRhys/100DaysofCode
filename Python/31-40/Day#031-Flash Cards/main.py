@@ -1,7 +1,8 @@
 """ Phrase Cards!
     Coded by TechGYQ
     www.MythosWorks.com
-    OC:2022.08.06-0000 """
+    OC:2022.08.06-0000
+    R1:2023.01.22-0123 """
 
 import logic
 
