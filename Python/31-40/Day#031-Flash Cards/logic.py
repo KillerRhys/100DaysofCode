@@ -3,7 +3,7 @@
     www.MythosWorks.com
     OC:2022.08.17-1954
     R1:2023.01.22-0123 """
-
+import random
 # Imports
 import sys
 import tkinter.ttk
@@ -88,14 +88,17 @@ class Logic:
         # Start screen.
         self.start_screen()
 
-        # Game screen item load
-        self.backdrop = Canvas(width=300, height=300)
-        self.backdrop.create_rectangle(0, 0, 300, 300, fill='blue', outline='white')
+        # Game screen item load TODO: Add text / bbox?
+        self.question_text = Label(text='test', bg='blue', fg='white', font=('Helvetica bold', 16), width=10, height=5)
+        # self.backdrop = Canvas(width=300, height=300)
+        # self.backdrop.create_rectangle(0, 0, 300, 300, fill='blue', outline='white')
 
         # Questions & Answer data
+        self.cards = 0
         self.nums = []
         self.questions = []
         self.answers = []
+        self.current_answers = []
         self.total = 0
         self.guessed = 0
 
@@ -200,15 +203,20 @@ class Logic:
         self.btn_guess2.grid_forget()
         self.btn_guess3.grid_forget()
         self.score_label.grid_forget()
-        #TODO remove backdrop on clearscreen!
+        try:
+            self.question_text.grid_forget()
+        except AttributeError:
+            print('oops')
 
     def load_screen(self):
+        self.display.geometry('320x75')
         self.clear_screen()
         self.PBar.grid(row=0, column=0)
         self.load_text.grid(row=2, column=0)
 
     # Starting screen to select language to learn.
     def start_screen(self):
+        self.display.geometry("215x100")
         self.clear_screen()
         self.btn_Japan.grid(row=0, column=0)
         self.btn_Spanish.grid(row=0, column=1)
@@ -217,18 +225,43 @@ class Logic:
         # self.btn_Irish.grid(row=2, column=0)
         # self.btn_New.grid(row=2, column=1)
 
+    def question_setup(self):
+        self.question_text.config(text=self.questions[i])
+        self.current_answers.append(random.choice(self.answers))
+        self.current_answers.append(random.choice(self.answers))
+        self.current_answers.append(self.answers[i])
+        random.shuffle(self.current_answers)
+        self.btn_guess1.config(text=self.current_answers[0])
+        self.btn_guess2.config(text=self.current_answers[1])
+        self.btn_guess3.config(text=self.current_answers[2])
+
+    # def check_answer(self, text):
+
+    def game_loop(self):
+        self.cards = len(self.questions)
+        i = 0
+
+        if self.cards > 0:
+            self.question_setup()
+
+        else:
+            self.start_screen()
+
     # Game screen holds question, answer and 2 false answers also keeps score.
     # TODO place items on guess buttons & word on card.
     def game_screen(self):
         self.clear_screen()
+        self.display.geometry('425x250')
         self.score()
         self.score_label.grid(column=1, row=0,)
         self.btn_Quit.grid(column=3, row=0)
-        self.btn_Swap.grid(column=3, row=1)
-        self.backdrop.grid(column=1, row=2)
+        self.btn_Swap.grid(column=3, row=1, sticky='n')
+        self.question_text.grid(row=1, column=1)
+        # self.backdrop.grid(column=1, row=2)
         self.btn_guess1.grid(column=0, row=4)
         self.btn_guess2.grid(column=1, row=4)
         self.btn_guess3.grid(column=2, row=4)
+        self.game_loop()
 
     # TODO implement messagebox to change language or try again!
     def menu_screen(self):
