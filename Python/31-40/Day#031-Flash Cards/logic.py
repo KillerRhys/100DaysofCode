@@ -6,6 +6,7 @@
 import random
 # Imports
 import sys
+import time
 import tkinter.ttk
 
 import googletrans
@@ -79,9 +80,9 @@ class Logic:
         self.btn_Continue = Button(width=15, text='Continue', command=self.game_screen, bg='#000000', fg='#FFFFFF')
         self.btn_Language = Button(width=15, text='Swap Language', command=self.start_screen, bg='#000000',
                                    fg='#FFFFFF')
-        self.btn_guess1 = Button(width=10, text='')
-        self.btn_guess2 = Button(width=10, text='')
-        self.btn_guess3 = Button(width=10, text='')
+        self.btn_guess1 = Button(width=10, text='', command=lambda: self.check_answer(self.btn_guess1.cget('text')))
+        self.btn_guess2 = Button(width=10, text='', command=lambda: self.check_answer(self.btn_guess2.cget('text')))
+        self.btn_guess3 = Button(width=10, text='', command=lambda: self.check_answer(self.btn_guess3.cget('text')))
         self.btn_Quit = Button(width=15, text='Quit Playing', command=sys.exit, bg='#000000', fg='#FFFFFF')
         self.btn_Swap = Button(width=15, text='Change Language', command=self.start_screen, bg='#000000', fg='#FFFFFF')
 
@@ -99,6 +100,7 @@ class Logic:
         self.questions = []
         self.answers = []
         self.current_answers = []
+        self.decoy_list = []
         self.total = 0
         self.guessed = 0
 
@@ -136,8 +138,14 @@ class Logic:
             self.load_text.config(text=f'Picking questions! {percentage}% of 100% loaded')
             word = self.language_data['Word'].iloc[item]
             answer = self.transpose.translate(word, dest='en')
+            if answer in self.decoy_list:
+                pass
+            else:
+                self.decoy_list.append(answer.text)
+
             self.questions.append(word)
             self.answers.append(answer.text)
+            print(self.decoy_list)
 
         self.game_screen()
         print(self.questions, self.answers)
@@ -226,20 +234,50 @@ class Logic:
         # self.btn_New.grid(row=2, column=1)
 
     def question_setup(self):
-        self.question_text.config(text=self.questions[i])
-        self.current_answers.append(random.choice(self.answers))
-        self.current_answers.append(random.choice(self.answers))
-        self.current_answers.append(self.answers[i])
-        random.shuffle(self.current_answers)
-        self.btn_guess1.config(text=self.current_answers[0])
-        self.btn_guess2.config(text=self.current_answers[1])
-        self.btn_guess3.config(text=self.current_answers[2])
+        if len(self.questions) > 0:
+            self.current_answers.clear()
+            self.question_text.config(text=self.questions[0])
+            pool = len(self.decoy_list)
+            self.current_answers.append(self.answers[0])
+            item = random.randrange(1, pool)
+            self.current_answers.append(self.decoy_list[item])
+            item = random.randrange(1, pool)
+            self.current_answers.append(self.decoy_list[item])
+            random.shuffle(self.current_answers)
+            self.btn_guess1.config(text=self.current_answers[0])
+            self.btn_guess2.config(text=self.current_answers[1])
+            self.btn_guess3.config(text=self.current_answers[2])
+            self.display.update()
 
-    # def check_answer(self, text):
+        else:
+            self.start_screen()
+
+    def check_answer(self, text):
+        if text == self.answers[0]:
+            self.question_text.config(bg='green')
+            self.guessed += 1
+            self.total += 1
+            self.score()
+            self.display.update()
+            time.sleep(2)
+            self.questions.pop(0)
+            self.answers.pop(0)
+            self.question_text.config(bg='blue')
+            self.question_setup()
+
+        else:
+            self.questions.pop(0)
+            self.answers.pop(0)
+            self.total += 1
+            self.score()
+            self.question_text.config(bg='red')
+            self.display.update()
+            time.sleep(2)
+            self.question_text.config(bg='blue')
+            self.question_setup()
 
     def game_loop(self):
         self.cards = len(self.questions)
-        i = 0
 
         if self.cards > 0:
             self.question_setup()
