@@ -3,14 +3,13 @@
     www.MythosWorks.com
     OC:2022.08.17-1954
     R1:2023.01.22-0123 """
-import random
+
 # Imports
+import random
 import sys
 import time
 import tkinter.ttk
-
 import googletrans
-from random import randint
 import pandas as pd
 from tkinter import *
 
@@ -127,7 +126,7 @@ class Logic:
 
         while x > 0:
             x -= 1
-            self.nums.append(randint(0, len(self.data[self.col_num])))
+            self.nums.append(random.randint(0, len(self.data[self.col_num])))
 
         for item in self.nums:
             p = 10
@@ -252,6 +251,7 @@ class Logic:
         else:
             self.start_screen()
 
+    # Takes user selection and checks it against the answer, Color change for accuracy and clears list.
     def check_answer(self, text):
         if text == self.answers[0]:
             self.question_text.config(bg='green')
@@ -289,7 +289,7 @@ class Logic:
     # TODO place items on guess buttons & word on card.
     def game_screen(self):
         self.clear_screen()
-        self.display.geometry('425x250')
+        self.display.geometry('550x275')
         self.score()
         self.score_label.grid(column=1, row=0,)
         self.btn_Quit.grid(column=3, row=0)
