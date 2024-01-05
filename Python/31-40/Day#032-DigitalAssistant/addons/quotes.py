@@ -1,4 +1,4 @@
-""" Quote nabber
+""" Quote Grabber
     Coded by TechGYQ
     www.mythosworks.com
     2023.11.13-1804 """

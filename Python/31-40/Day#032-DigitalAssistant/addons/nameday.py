@@ -3,12 +3,11 @@
     www.mythosworks.com
     2023.11.14-"""
 
+import json
+
 
 def get_nameday():
-    nameday = {}
-    with open("resources/namedays.dat") as data:
-        for line in data['Nameday']:
-            (key, val) = line.split()
-            nameday[int(key)] = val
+    f = open('resources/namedays.dat', 'r')
+    nameday = json.loads(f.read())
 
     return nameday
