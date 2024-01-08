@@ -20,8 +20,9 @@ class Brain:
         # SMTP vars
         self.email = ""
         self.password = ""
-        self.connection = postman.SMTP("smtp.gmail.com")
-        self.connection.starttls()
+        # self.connection = postman.SMTP("smtp.gmail.com")
+        # self.connection.starttls()
+        # self.connection.close()
 
         # Datetime variables.
         self.today = dt.datetime.now()
@@ -42,14 +43,6 @@ class Brain:
 
     # Gathers news based on area.
     def daily_news(self):
-        # TODO fetch local news
+        # TODO fetch local news future task!
         pass
 
-    # Checks today's date against list of birthdays and e-mails a card if matched.
-    def birthdays_today(self):
-        today = str(self.today)
-        for key, value in self.birthday.items():
-            if value[5:7] == today[5:7]:
-                if value[9:10] == today[9:10]:
-                    age = int(self.year) - int(value[0:4])
-                    # Select birthday message. Insert age and e-mail!

@@ -1,3 +1,4 @@
-Happy Birthmas [name]!
-    I hope it's the best damn day ever!
-                TechGYQ!
+{
+    "Card0" : "Happy Birthday [NAME], You're [AGE]! Have the best day ever!",
+    "Card1" : "Happy Birthmas [NAME], [AGE] years old already! Have a great one!"
+}

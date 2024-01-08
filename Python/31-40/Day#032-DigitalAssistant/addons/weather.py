@@ -14,6 +14,8 @@ def daily_weather(area):
 
     observation = mgr.weather_at_place(area)
     w = observation.weather
-    print(f" %s with a temperature of %s. A low of %s with a high of %s" % (w.detailed_status, round(w.temperature(
+    forecast = (f" %s with a temperature of %s. A low of %s with a high of %s" % (w.detailed_status, round(w.temperature(
         'fahrenheit')['temp']), round(w.temperature('fahrenheit')['temp_min']),
         round(w.temperature('fahrenheit')['temp_max'])))
+
+    return forecast

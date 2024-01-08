@@ -8,4 +8,4 @@ import psycho
 assistant = psycho.Brain()
 print(assistant.quote)
 print(assistant.weather)
-assistant.birthdays_today()
+print(assistant.birthday)
