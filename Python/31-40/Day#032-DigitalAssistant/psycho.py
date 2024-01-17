@@ -20,9 +20,8 @@ class Brain:
         # SMTP vars
         self.email = ""
         self.password = ""
-        # self.connection = postman.SMTP("smtp.gmail.com")
-        # self.connection.starttls()
-        # self.connection.close()
+        self.inbox = ""
+        self.connection = postman.SMTP("smtp.gmail.com")
 
         # Datetime variables.
         self.today = dt.datetime.now()
@@ -35,14 +34,43 @@ class Brain:
         self.quote = quotes.daily_motivation()
 
         # Birthday variables.
-        self.birthday = nameday.get_nameday()
+        self.birthday_cards, self.birthday_list, self.birthday_addresses = nameday.get_nameday()
 
         # Weather Variables.
         self.area = "Dayton, US"
         self.weather = weather.daily_weather(self.area)
 
+    def get_daily_notifications(self):
+        self.quote = quotes.daily_motivation()
+        self.weather = weather.daily_weather(self.area)
+        self.birthday_cards, self.birthday_list, self.birthday_addresses = nameday.get_nameday()
+        self.connection.starttls()
+        self.connection.login(user=self.email, password=self.password)
+        self.connection.sendmail(from_addr=self.email,
+                                 to_addrs=self.inbox,
+                                 msg=f"Subject: Good Morning!\n\nToday's Quote: "
+                                     f"{self.quote}\nToday's Weather{self.weather}!")
+        for _ in self.birthday_cards:
+
+            self.connection.sendmail(from_addr=self.email,
+                                     to_addrs=self.birthday_addresses[0],
+                                     msg=f"Subject: Happy Birthday!\n\n{self.birthday_cards[0]}")
+            self.birthday_cards.pop(0)
+            self.birthday_addresses.pop(0)
+
+        self.connection.close()
+
+        if len(self.birthday_cards) == 0:
+            print("No birthday's today, but some this month: ")
+            for item in self.birthday_list:
+                print(item)
+
+        else:
+            print("Birthday's today: ")
+            for item in self.birthday_list:
+                print(item)
+
     # Gathers news based on area.
     def daily_news(self):
         # TODO fetch local news future task!
         pass
-

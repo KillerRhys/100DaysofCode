@@ -6,6 +6,4 @@
 import psycho
 
 assistant = psycho.Brain()
-print(assistant.quote)
-print(assistant.weather)
-print(assistant.birthday)
+assistant.get_daily_notifications()
