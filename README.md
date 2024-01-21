@@ -1,2 +1,2 @@
 # 100DaysofCode
- My 100 day journeys through different code!
+ My 100 day journey through different code!
