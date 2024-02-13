@@ -1,0 +1,33 @@
+* {
+    color: #000000;
+}
+
+#purple {
+    font-weight: normal;
+    color: #AA00FF;
+}
+
+#blue {
+    font-weight: normal;
+    color: #0000FF;
+}
+
+#red {
+    font-weight: normal;
+    color: #FF0000;
+}
+
+#green {
+    font-weight: normal;
+    color: #00FF00;
+}
+
+#yellow {
+    font-weight: normal;
+    color: #FFFF00;
+}
+
+#black {
+    font-weight: normal;
+    color: #000000;
+}
