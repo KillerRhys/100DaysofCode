@@ -1,0 +1,28 @@
+* {
+    background: black;
+    color: blue;
+    text-align: center;
+}
+
+html {
+  font-family: "Kode Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  border: 5px solid blue;
+}
+
+img {
+    margin-top: 5px;
+    border: 2px solid purple;
+}
+
+h1 {;
+    font-sizing: 3rem;
+    color: purple
+
+}
+
+h2 {
+    font-sizing: 2rem;
+}
