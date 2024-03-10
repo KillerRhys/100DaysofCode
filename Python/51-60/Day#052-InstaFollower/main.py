@@ -1,7 +1,7 @@
 """ Insta-Follower
     Coded by TechGYQ
     www.mythosworks.com
-    OC:2024.03.08(1700) """
+    OC:2024.03.08(1700) Skipped due to instagram insta-ban oon any new account I made! """
 
 # Imports.
 from selenium import webdriver
